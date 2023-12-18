@@ -1,0 +1,40 @@
+name: Build APK and AAB
+
+on:
+  push:
+    branches:
+      - automation  # Ganti dengan nama branch yang sesuai
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+    - name: Give Permission
+      run: chmod +x ./gradlew
+      
+    - name: Build with Gradle
+      run: ./gradlew assembleRelease
+
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-artifacts
+        path: app/build/outputs/
+
+    - name: Build AAB
+      run: ./gradlew bundleRelease
+
+    - name: Archive AAB
+      uses: actions/upload-artifact@v2
+      with:
+        name: aab-artifact
+        path: app/build/outputs/bundle/release/
