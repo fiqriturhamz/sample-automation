@@ -31,12 +31,6 @@ jobs:
         name: app-artifacts
         path: app/build/outputs/
 
-    - name: Archive AAB
-      uses: actions/upload-artifact@v2
-      with:
-        name: aab-artifact
-        path: app/build/outputs/
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -51,15 +45,11 @@ jobs:
         distribution: 'adopt'
         java-version: '17'
 
-    - uses: r0adkll/sign-android-release@v1
-      name: Sign app APK
-    # ID used to access action output
-      id: sign_app
+    - name: Sign APKs
+      uses: r0adkll/sign-android-release@v1
       with:
-        releaseDirectory: app/build/outputs/
+        releaseDirectory: app/build/outputs/apk/release/
         signingKeyBase64: ${{ secrets.SIGNING_KEY }}
         alias: ${{ secrets.ALIAS }}
         keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
-    
-
