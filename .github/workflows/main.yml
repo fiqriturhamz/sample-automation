@@ -24,6 +24,9 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew assembleRelease
 
+    - name: Clean Project
+      run: ./gradlew clean
+
     - name: Archive artifacts
       uses: actions/upload-artifact@v2
       with:
