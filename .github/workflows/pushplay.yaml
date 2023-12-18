@@ -1,0 +1,59 @@
+name: Build and Deploy to Google Play
+
+on:
+  push:
+    branches:
+      - automate
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '17'
+
+    - name: Give Permission
+      run: chmod +x ./gradlew
+      
+    - name: Build with Gradle
+      run: ./gradlew clean assembleRelease bundleRelease
+
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-artifacts
+        path: app/build/outputs/apk/release/
+    - name: Debug Output
+      run: |
+        ls -R app/build/outputs/
+        ls -R app/build/outputs/apk/release/
+        
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '17'
+
+    - name: Sign APKs
+      uses: r0adkll/sign-android-release@v1
+      with:
+        releaseDirectory: app/build/outputs/apk/release/
+        signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+        alias: ${{ secrets.ALIAS }}
+        keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+        keyPassword: ${{ secrets.KEY_PASSWORD }}
