@@ -6,11 +6,6 @@ plugins {
 android {
     namespace 'com.id.sample_automation'
     compileSdk 34
-
-    bundle {
-        // ...
-        outputDirectory = file("$buildDir/outputs/bundle/release")
-    }
     
     defaultConfig {
         applicationId "com.id.sample_automation"
