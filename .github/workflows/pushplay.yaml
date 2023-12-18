@@ -35,7 +35,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: aab-artifact
-        path: app/build/outputs/bundle/release/
+        path: app/build/outputs/
 
   deploy:
     needs: build
