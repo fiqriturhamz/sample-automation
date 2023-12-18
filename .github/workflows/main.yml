@@ -41,3 +41,6 @@ jobs:
       with:
         name: aab-artifact
         path: app/build/outputs/bundle/release/
+    
+    - name: Make cURL request
+      run: curl -k -i -X POST -H "x-api-key: default" -H "Content-Type: application/json" -d "{\"appId\": \"4F00E903818C5B9E\", \"versionName\": \"1.0.3\", \"versionCode\": \"1\"}" http://103.96.146.239:8090/api/external/app-version
