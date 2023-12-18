@@ -1,0 +1,65 @@
+name: Build and Deploy to Google Play
+
+on:
+  push:
+    branches:
+      - automate
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '17'
+
+    - name: Give Permission
+      run: chmod +x ./gradlew
+      
+    - name: Build with Gradle
+      run: ./gradlew clean assembleRelease bundleRelease
+
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-artifacts
+        path: app/build/outputs/
+
+    - name: Archive AAB
+      uses: actions/upload-artifact@v2
+      with:
+        name: aab-artifact
+        path: app/build/outputs/bundle/release/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '17'
+
+    - name: Download gradle-play-publisher
+      run: |
+        wget https://github.com/Triple-T/gradle-play-publisher/releases/download/v3.10.0/gradle-play-publisher-3.10.0.jar -O gradle-play-publisher.jar
+
+    - name: Deploy to Google Play
+      run: |
+        java -jar gradle-play-publisher.jar
+          --track internal
+          --json-key ${{ secrets.PLAY_STORE_JSON_KEY }}
+          --package-name com.example.myapp
+          --aab app/build/outputs/bundle/release/app-release.aab
+          --skip-upload-metadata
