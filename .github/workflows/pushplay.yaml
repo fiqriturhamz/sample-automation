@@ -50,12 +50,16 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '17'
+
+    - uses: r0adkll/sign-android-release@v1
+      name: Sign app APK
+    # ID used to access action output
+      id: sign_app
+      with:
+        releaseDirectory: app/build/outputs/apk/release
+        signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+        alias: ${{ secrets.ALIAS }}
+        keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+        keyPassword: ${{ secrets.KEY_PASSWORD }}
     
-    - name: Deploy to Google Play
-      run: |
-        java -jar gradle-play-publisher.jar
-          --track internal
-          --json-key ${{ secrets.PLAY_STORE_JSON_KEY }}
-          --package-name com.id.sample_automation
-          --aab app/build/outputs/bundle/release/app-release.aab
-          --skip-upload-metadata
+
