@@ -3,7 +3,7 @@ name: Build APK and AAB
 on:
   push:
     branches:
-      - automation  # Ganti dengan nama branch yang sesuai
+      - automate  # Ganti dengan nama branch yang sesuai
 
 jobs:
   build:
