@@ -50,11 +50,7 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '17'
-
-    - name: Download gradle-play-publisher
-      run: |
-        wget https://github.com/Triple-T/gradle-play-publisher/releases/download/v3.10.0/gradle-play-publisher-3.10.0.jar -O gradle-play-publisher.jar
-
+    
     - name: Deploy to Google Play
       run: |
         java -jar gradle-play-publisher.jar
