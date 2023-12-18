@@ -1,0 +1,46 @@
+name: Build APK and AAB
+
+on:
+  push:
+    branches:
+      - automate  # Ganti dengan nama branch yang sesuai
+#Ngihaaa
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '17'
+    - name: Give Permission
+      run: chmod +x ./gradlew
+      
+    - name: Build with Gradle
+      run: ./gradlew assembleRelease
+
+    - name: Clean Project
+      run: ./gradlew clean
+
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-artifacts
+        path: app/build/outputs/
+
+    - name: Build AAB
+      run: ./gradlew bundleRelease
+
+    - name: Archive AAB
+      uses: actions/upload-artifact@v2
+      with:
+        name: aab-artifact
+        path: app/build/outputs/bundle/release/
+    
+    #- name: Make cURL request
+      #run: curl -k -i -X POST -H "x-api-key: default" -H "Content-Type: application/json" -d "{\"appId\": \"4F00E903818C5B9E\", \"versionName\": \"1.0.3\", \"versionCode\": \"1\"}" http://103.96.146.239:8090/api/external/app-version
