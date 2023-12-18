@@ -60,6 +60,6 @@ jobs:
         java -jar gradle-play-publisher.jar
           --track internal
           --json-key ${{ secrets.PLAY_STORE_JSON_KEY }}
-          --package-name com.example.myapp
+          --package-name com.id.sample_automation
           --aab app/build/outputs/bundle/release/app-release.aab
           --skip-upload-metadata
