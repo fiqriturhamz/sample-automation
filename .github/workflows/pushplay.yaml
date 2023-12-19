@@ -28,7 +28,7 @@ jobs:
     - name: Archive artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: sample_automation  # Match the artifact name here
+        name: sample_automation  # Nama Artifact
         path: app/release/
     - name: Debug Output
       run: |
@@ -66,7 +66,7 @@ jobs:
     - name: Download APK from build
       uses: actions/download-artifact@v1
       with:
-        name: sample_automation  # Match the artifact name here
+        name: sample_automation  # Nama Arifact
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v1
