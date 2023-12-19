@@ -62,6 +62,8 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
     steps:
     - name: Download APK from build
       uses: actions/download-artifact@v1
@@ -78,3 +80,4 @@ jobs:
         draft: false
         prerelease: false
         files: sample_automation/sample_automation_${{ github.event.inputs.version }}.apk
+    
