@@ -85,13 +85,13 @@ jobs:
         draft: false
         prerelease: false
         files: sample_automation/sample_automation${{ github.event.inputs.version }}.apk
-
+        
     # - name: Debug Output Release
     #   run:
     #     ls -R app/release/
     
   publish:
-    needs: release
+    needs: deploy
     runs-on: ubuntu-latest
     steps:
 
@@ -119,6 +119,6 @@ jobs:
       with:
         serviceAccountJson: service_account.json
         packageName: com.id.sample_automation
-        releaseFile: app/release/
+        releaseFile: app/release/app-release.apk
         track: alpha
         whatsNewDirectory: distribution/
