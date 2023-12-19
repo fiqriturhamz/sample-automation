@@ -28,7 +28,7 @@ jobs:
     - name: Archive artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: app-artifacts
+        name: sample_automation  # Match the artifact name here
         path: app/release/
     - name: Debug Output
       run: |
@@ -66,7 +66,7 @@ jobs:
     - name: Download APK from build
       uses: actions/download-artifact@v1
       with:
-        name: sample_automation
+        name: sample_automation  # Match the artifact name here
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v1
@@ -77,5 +77,4 @@ jobs:
         name: Release v${{ github.event.inputs.version }}
         draft: false
         prerelease: false
-        #files: <<application name>>/<<application name>>_${{ github.event.inputs.version }}.apk
         files: sample_automation/sample_automation_${{ github.event.inputs.version }}.apk
