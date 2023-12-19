@@ -92,37 +92,37 @@ jobs:
           prerelease: false
           files: sample_automation/sample_automation${{ github.event.inputs.version }}.apk
 
-  publish:
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+  # publish:
+  #   needs: deploy
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v2
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: '17'
+  #     - name: Set up JDK
+  #       uses: actions/setup-java@v2
+  #       with:
+  #         distribution: 'adopt'
+  #         java-version: '17'
 
-      - name: Debug Output
-        run: ls -R app/release/
+  #     - name: Debug Output
+  #       run: ls -R app/release/
 
-      - name: Build with Gradle
-        run: ./gradlew clean assembleRelease bundleRelease
+  #     - name: Build with Gradle
+  #       run: ./gradlew clean assembleRelease bundleRelease
 
-      - name: Build and Publish to Play Store
-        run: |
-          chmod +x ./gradlew
-          ./gradlew publishBundle
-        env:
-          PLAY_PUBLISH_JSON: ${{ secrets.PLAY_STORE_JSON_KEY }}
+  #     - name: Build and Publish to Play Store
+  #       run: |
+  #         chmod +x ./gradlew
+  #         ./gradlew publishBundle
+  #       env:
+  #         PLAY_PUBLISH_JSON: ${{ secrets.PLAY_STORE_JSON_KEY }}
 
-      - name: Deploy to Alpha
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJson: service_account.json
-          packageName: com.id.sample_automation
-          releaseFiles: app/release/app-release.apk
-          track: alpha
-          whatsNewDirectory: distribution/
+  #     - name: Deploy to Alpha
+  #       uses: r0adkll/upload-google-play@v1
+  #       with:
+  #         serviceAccountJson: service_account.json
+  #         packageName: com.id.sample_automation
+  #         releaseFiles: app/release/app-release.apk
+  #         track: alpha
+  #         whatsNewDirectory: distribution/
