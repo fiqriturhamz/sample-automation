@@ -96,8 +96,8 @@ jobs:
         java-version: '17'
 
     - name: Debug Output
-      run: |
-        ls -R app/build/outputs/
+      run:
+     #   ls -R app/build/outputs/
         ls -R app/build/outputs/apk/release/
 
     - name: Build and Publish to Play Store
@@ -106,11 +106,11 @@ jobs:
       env:
           PLAY_PUBLISH_JSON: ${{ secrets.PLAY_STORE_JSON_KEY }}
     
-    # - name: Deploy to Alpha
-    #   uses: r0adkll/upload-google-play@v1
-    #   with:
-    #     serviceAccountJson: service_account.json
-    #     packageName: com.id.sample_automation
-    #     releaseFile: app/build/outputs/bundle/release/app-release.aab
-    #     track: alpha
-    #     whatsNewDirectory: distribution/
+    - name: Deploy to Alpha
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJson: service_account.json
+        packageName: com.id.sample_automation
+        releaseFile: app/build/outputs/bundle/release/app-release.aab
+        track: alpha
+        whatsNewDirectory: distribution/
