@@ -81,3 +81,12 @@ jobs:
         prerelease: false
         files: sample_automation/sample_automation_${{ github.event.inputs.version }}.apk
     
+  publish:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build and Publish to Play Store
+      run: |
+          ./gradlew publishBundle
+      env:
+          PLAY_PUBLISH_JSON: ${{ secrets.PLAY_STORE_JSON_KEY }}
