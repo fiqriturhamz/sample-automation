@@ -32,7 +32,7 @@ jobs:
         path: app/release/
     - name: Debug Output
       run: |
-        ls -R app/build/release/
+        ls -R app/build/outputs/
         ls -R app/build/outputs/apk/release/
         
   deploy:
