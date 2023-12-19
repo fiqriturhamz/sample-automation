@@ -57,11 +57,11 @@ jobs:
         alias: ${{ secrets.ALIAS }}
         keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
-    
-    - name: Debug Output
-      run:
-        ls -R app/release/
-        ls -R app/build/outputs/apk/release/
+    # Matiin bentar wak
+    # - name: Debug Output
+    #   run:
+    #     ls -R app/release/
+    #     ls -R app/build/outputs/apk/release/
         
   release:
     needs: deploy
@@ -99,6 +99,10 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '17'
+        
+    - name: Debug Output
+      run:
+        ls -R app/release/
 
     - name: Build and Publish to Play Store
       run:
@@ -111,6 +115,6 @@ jobs:
       with:
         serviceAccountJson: service_account.json
         packageName: com.id.sample_automation
-        releaseFile: app/build/outputs/bundle/release/app-release.aab
+        releaseFile: app/app-release.aab
         track: alpha
         whatsNewDirectory: distribution/
