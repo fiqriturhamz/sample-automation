@@ -91,11 +91,10 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '17'
-          
-    - name: Give Permission
-      run: chmod +x ./gradlew
-      
+        
     - name: Build and Publish to Play Store
-      run: ./gradlew publishBundle
+      run: |
+        chmod +x ./gradlew
+        ./gradlew publishBundle
       env:
           PLAY_PUBLISH_JSON: ${{ secrets.PLAY_STORE_JSON_KEY }}
