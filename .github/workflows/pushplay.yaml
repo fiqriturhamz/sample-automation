@@ -59,7 +59,7 @@ jobs:
         keyPassword: ${{ secrets.KEY_PASSWORD }}
         
   release:
-    needs: build
+    needs: deploy
     runs-on: ubuntu-latest
 
     steps:
