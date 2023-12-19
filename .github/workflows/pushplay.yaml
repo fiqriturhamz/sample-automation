@@ -58,9 +58,9 @@ jobs:
         keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
     # Matiin bentar wak
-    # - name: Debug Output
-    #   run:
-    #     ls -R app/release/
+    - name: Debug Output Deploy
+      run:
+        ls -R app/release/
     #     ls -R app/build/outputs/apk/release/
         
   release:
@@ -85,6 +85,10 @@ jobs:
         draft: false
         prerelease: false
         files: sample_automation/sample_automation_${{ github.event.inputs.version }}.apk
+
+    - name: Debug Output Release
+      run:
+        ls -R app/release/
     
   publish:
     needs: release
