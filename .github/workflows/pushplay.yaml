@@ -85,6 +85,9 @@ jobs:
     needs: release
     runs-on: ubuntu-latest
     steps:
+    - name: Give Permission
+      run: chmod +x ./gradlew
+      
     - name: Build and Publish to Play Store
       run: |
           ./gradlew publishBundle
