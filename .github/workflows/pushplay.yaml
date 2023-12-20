@@ -75,10 +75,11 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Download APK from build
-        uses: actions/download-artifact@v1
+      - name: Download APK and AAB from build
+        uses: actions/download-artifact@v2
         with:
           name: sample_automation
+          path: app/release/
 
       - name: Create Release
         id: create_release
@@ -86,13 +87,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v1.1${{ github.event.inputs.version }}
-          name: Release Default APK from Epersepin${{ github.event.inputs.version }}
+          tag_name: v${{ github.event.inputs.version }}
+          name: Release Default APK and AAB from Epersepin v${{ github.event.inputs.version }}
           draft: false
           prerelease: false
           files: |
-             app/release/sample_automation*.apk
-             app/release/sample_automation*.aab
+            - app/release/sample_automation*.apk
+            - app/release/sample_automation*.aab
+
+      - name: Upload AAB to Google Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
+          packageName: com.id.sample_automation
+          releaseFiles: app/release/sample_automation*.aab
+          track: alpha # Replace with your desired track (e.g., alpha, beta, production)
+          whatsNewDirectory: distribution/
 
   # publish:
   #   needs: deploy
