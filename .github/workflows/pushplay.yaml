@@ -75,7 +75,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Download APK and AAB from build
+      - name: Download APK and AAB from deploy
         uses: actions/download-artifact@v2
         with:
           name: sample_automation
@@ -91,9 +91,7 @@ jobs:
           name: Release Default APK and AAB from Epersepin v${{ github.event.inputs.version }}
           draft: false
           prerelease: false
-          files: |
-            - app/release/sample_automation*.apk
-            - app/release/sample_automation*.aab
+          files: app/release/sample_automation*.apk
 
       - name: Upload AAB to Google Play
         uses: r0adkll/upload-google-play@v1
