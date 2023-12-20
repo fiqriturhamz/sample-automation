@@ -87,16 +87,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v1.1${{ github.event.inputs.version }}
-          name: Release v${{ github.event.inputs.version }}
+          name: Release Default APK from Epersepin${{ github.event.inputs.version }}
           draft: false
           prerelease: false
           files: |
-             sample_automation/sample_automation${{ github.event.inputs.version }}.apk
-             sample_automation/sample_automation${{ github.event.inputs.version }}.aab
+             app/release/sample_automation*.apk
+             app/release/sample_automation*.aab
 
   # publish:
   #   needs: deploy
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest            
   #   steps:
   #     - name: Checkout Repository
   #       uses: actions/checkout@v2
