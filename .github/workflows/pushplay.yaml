@@ -42,4 +42,4 @@ jobs:
       - name: Debug Output
         run: |
           ls -R app/release/
-          ls -R app/build/outputs/apk/release/
+          ls -R app/build/outputs/apk/debug/release/
