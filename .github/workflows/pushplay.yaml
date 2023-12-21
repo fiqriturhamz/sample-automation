@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.3
         with:
           name: sample-automation.apk
-          path: app/build/outputs/apk/release/app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Debug Output
         run: |
