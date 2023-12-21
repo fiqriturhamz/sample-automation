@@ -1,0 +1,138 @@
+name: Build and Release Github
+
+on:
+  push:
+    branches:
+      - automate
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number'
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Give Permission
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew clean assembleRelease bundleRelease
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: sample_automation
+          path: app/release/
+
+      - name: Debug Output
+        run: |
+          ls -R app/release/
+          ls -R app/build/outputs/apk/release/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Sign APKs
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/release/
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Debug Output Deploy
+        run: |
+          ls -R app/release/
+
+  release:
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+    steps:
+      - name: Download APK and AAB from deploy
+        uses: actions/download-artifact@v2
+        with:
+          name: sample_automation
+          path: app/release/
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.event.inputs.version }}
+          name: Release Default APK and AAB from Epersepin v${{ github.event.inputs.version }}
+          draft: false
+          prerelease: false
+          files: app/release/sample_automation*.apk
+
+      - name: Upload AAB to Google Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
+          packageName: com.id.sample_automation
+          releaseFiles: app/release/sample_automation*.aab
+          track: alpha # Replace with your desired track (e.g., alpha, beta, production)
+          whatsNewDirectory: distribution/
+
+  # publish:
+  #   needs: deploy
+  #   runs-on: ubuntu-latest            
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v2
+
+  #     - name: Set up JDK
+  #       uses: actions/setup-java@v2
+  #       with:
+  #         distribution: 'adopt'
+  #         java-version: '17'
+
+  #     - name: Debug Output
+  #       run: ls -R app/release/
+
+  #     - name: Build with Gradle
+  #       run: ./gradlew clean assembleRelease bundleRelease
+
+  #     - name: Build and Publish to Play Store
+  #       run: |
+  #         chmod +x ./gradlew
+  #         ./gradlew publishBundle
+  #       env:
+  #         PLAY_PUBLISH_JSON: ${{ secrets.PLAY_STORE_JSON_KEY }}
+
+  #     - name: Deploy to Alpha
+  #       uses: r0adkll/upload-google-play@v1
+  #       with:
+  #         serviceAccountJson: service_account.json
+  #         packageName: com.id.sample_automation
+  #         releaseFiles: app/release/app-release.apk
+  #         track: alpha
+  #         whatsNewDirectory: distribution/
