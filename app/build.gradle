@@ -9,11 +9,11 @@ def keystoreProperties = new Properties()
 
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
-    namespace 'com.id.sample_automation'
+    namespace 'everspin.id.sample_automation'
     compileSdk 34
     
     defaultConfig {
-        applicationId "com.id.sample_automation"
+        applicationId "everspin.id.sample_automation"
         minSdk 24
         targetSdk 33
         versionCode 1
